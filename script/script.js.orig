@@ -141,56 +141,18 @@ function displayTableTime(tableNumber, tableTime){
 	}
 
 }
-table_status = "stopped";
+
 
 //Page Loaded
 $("document").ready(function(){
-	// load DB status
-	for (i=1;i<=3;i++){
-		tableNumber = i;
-		$.ajax({
-			url: "getTable.php",
-			type: "GET",
-			data: {table_num: tableNumber},
-			async: false
-		}).done(function( data ) {
-			table_status = data;
-			console.log(table_status);
 
-		});
+	$.ajax({
+		url: "getTable.php",
+		type: "GET",
+	}).done(function( data ) {
+		console.log(data);
+	});
 		
-		console.log("table_status=",table_status);
-
-		// Update Table form DB
-		if (table_status != "stopped" ){
-			
-			console.log("table status != stopped");
-			// Update Button Status
-			$("#btnStartTable" + tableNumber).text("Starting");
-			$("#btnStartTable" + tableNumber).attr("disabled", true);
-			$("#btnStopTable" + tableNumber).attr("disabled", false);
-			$("#btnPauseTable" + tableNumber).attr("disabled", false);
-			//$("#timeCurrentTable" + tableNumber).text(tableAction);
-			
-			// Dim the Table
-			$("#imageTable" + tableNumber).fadeTo(500,0.5);
-						
-			//Clean Up Stop Time
-			$("#timeStopTable" + tableNumber).text("Stop Time")
-			
-			//Set Table Status to "Started"
-			eval("tableStatus"+tableNumber+ " = 'Started'");
-			
-			//Display Table Start Time
-			eval("tableStartTime" + tableNumber + "= new Date(table_status);");
-			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
-			//DisplayTableTime(tableNumber,tableStartTime1);
-			//DisplayTableTime(1,Date(table_status));
-			//$("#timeStartTable" + tableNumber).text("Start Time: " + table_status.slice(-8));
-			
-		}
-	}	
-
 	// Listening Botton Action
 	$("button").click(function(){
 
@@ -264,6 +226,16 @@ $("document").ready(function(){
 			//Display Table Start Time
 			displayTableTime(tableNumber,eval("tableStopTime"+tableNumber));
 		}
+		// Pause Table
+		if (tableAction == "PauseTable"){
+			// Disable Table Start Button
+			$("#btnStartTable" + tableNumber).text("Resume");
+			$("#btnStartTable" + tableNumber).attr("disabled", false);
+			eval("tableStatus"+tableNumber+ " = 'Paused' ");
+			//$("#timeCurrentTable" + tableNumber).text(tableAction);
+			//displayTableTime(tableNumber, eval("tableStartTime"+tableNumber));
+		}
+		
 		
 	})
 
