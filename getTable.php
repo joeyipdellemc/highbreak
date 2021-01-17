@@ -11,16 +11,15 @@ require_once 'connection.php';
 
     if ($result->num_rows > 0) {
     // output data of each row 
-    while($row = $result->fetch_assoc()) {
+        while($row = $result->fetch_assoc()) {
         
-        if ($row["status"] == "started"){
-            echo $row["start_time"]; 
+            if ($row["status"] == "started"){
+                echo $row["start_time"]; 
+           }
+            else {echo "stopped";}
         }
-        
     }
-    } else {
-    echo "stopped";
-    }
+    else {echo "stopped";}
 
 
 $conn->close();

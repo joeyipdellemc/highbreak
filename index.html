@@ -7,25 +7,22 @@
 
 </head>
 
-<?php
-require_once 'connection.php';
-?>
 <body>
 	
-<! Top Bar>
+<!-- Top Bar -->
  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
   <h5 class="my-0 mr-md-auto font-weight-normal"><img src="media/highbreaklogo.png" class="img-fluid"alt="Highbreak Snooker"></h1>
 </h5>
+<!--
   <nav class="my-2 my-md-0 mr-md-3">
-    <a class="p-2 text-dark" href="#">Booking</a>
-    <a class="p-2 text-dark" href="#">Pricing</a>
-    <a class="p-2 text-dark" href="#">News</a>
-    <a class="p-2 text-dark" href="#">About</a>
+    <a class="p-2 text-dark" href="#">Timer</a>
+    <a class="p-2 text-dark" href="#">Admin</a>
   </nav>
+-->
   <a class="btn btn-outline-primary" href="#">Login</a>
 </div>
 
-<! Table 1 -3 Layout>
+<!-- Table 1 -3 Layout -->
 <div class="container">
   
   <div class="card-deck mb-3 text-center">
@@ -94,14 +91,22 @@ require_once 'connection.php';
 
 </div>
 
+
+<!-----------Footer ----------->
 <footer class="footer mt-auto py-3">
   <div class="container">
     <span class="text-muted" id="globalTime" > Current Time</span>
   </div>
 </footer>
 
+<footer class="fixed-bottom">
+  <div class="container">
+    <span class="text-muted" id="hourlyRate" >Hourly Rate</span>
+  </div>
+</footer>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="/script/script.js"></script>
+	<script src="/script/script.js"></script> 
 
 
 </body>

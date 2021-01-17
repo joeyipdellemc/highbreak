@@ -19,7 +19,7 @@ var tableStatus2
 var tableStatus3
 
 //Hourly Rate
-var hourlyRate = 120
+var hourlyRate = 120 //Default
 
 // Get Current date and Time
 var currentDate = new Date();
@@ -92,12 +92,12 @@ var x = setInterval(function() {
 	// Display Current to Footer
 	currentTime = hours + ":"+ minutes + ":" + seconds;
 	$("#globalTime").text("Current Time: " + currentTime);
-
+	$("#hourlyRate").text("Hourly Rate: HKD $"+ hourlyRate);
 	//Display Play Time
 	for (i=1;i<=3;i++){
 		if (eval("tableStatus"+ i) == "Started"){
-			console.log("Table "+i+" Start Time is " + eval("tableStartTime" + i))
-			console.log("Table "+i+" Charge is " + tablePlayMoney(i));
+			//console.log("Table "+i+" Start Time is " + eval("tableStartTime" + i))
+			//console.log("Table "+i+" Charge is " + tablePlayMoney(i));
 			$("#timePlayTable" + i).text("Play Time: " + tablePlayTime(i));
 			$("#timeChargeTable" + i).text("Charge HKD $" + tablePlayMoney (i));
 		}
@@ -145,7 +145,17 @@ table_status = "stopped";
 
 //Page Loaded
 $("document").ready(function(){
-	// load DB status
+	// load Database status
+	$.ajax({
+		url: "getHourlyRate.php",
+		type: "GET",
+		async: false
+	}).done(function( data ) {
+		hourlyRate = data;
+		//console.log(table_status);
+
+	});
+
 	for (i=1;i<=3;i++){
 		tableNumber = i;
 		$.ajax({
@@ -155,11 +165,11 @@ $("document").ready(function(){
 			async: false
 		}).done(function( data ) {
 			table_status = data;
-			console.log(table_status);
+			//console.log(table_status);
 
 		});
 		
-		console.log("table_status=",table_status);
+		//console.log("table_status=",table_status);
 
 		// Update Table form DB
 		if (table_status != "stopped" ){
@@ -205,11 +215,11 @@ $("document").ready(function(){
 		// Start Table
 		if (tableAction == "StartTable"){
 			// Disable Table Start Button
-			console.log($("#btnStartTable"+ tableNumber).text());
+			//console.log($("#btnStartTable"+ tableNumber).text());
 			
 			//check the button if it is pause, pause will no set new date otherwise, set startTime
 			if ($("#btnStartTable"+ tableNumber).text()!="Resume"){
-				console.log("set start Date");
+				//console.log("set start Date");
 				eval("tableStartTime" + tableNumber + "= new Date();");
 			}
 			// Update Button Status
@@ -232,13 +242,20 @@ $("document").ready(function(){
 
 			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
 
-		/*	
-		//testphp
-		$.ajax({
-			url: "startTable.php",
-			type: "GET",
-		});
-		*/	
+			//update Database
+			//console.log("charge=",tablePlayMoney(tableNumber));
+			$.ajax({
+				url: "startTable.php",
+				type: "GET",
+				data: {table_num: tableNumber},
+				async: false
+				}).done(function( data ) {
+					table_status = data;
+					//console.log(table_status);
+				
+				});
+
+
 		}
 			
 		// Stop Table
@@ -257,11 +274,24 @@ $("document").ready(function(){
 
 			// Un-Dim the Table
 			$("#imageTable" + tableNumber).fadeTo(500,1);
-
-			//Set Table Status to "Started"
+			
+			//update Database
+			console.log("charge=",tablePlayMoney(tableNumber));
+			$.ajax({
+				url: "stopTable.php",
+				type: "GET",
+				data: {table_num: tableNumber,charge: tablePlayMoney(tableNumber)},
+				async: false
+			}).done(function( data ) {
+				table_status = data;
+				console.log(table_status);
+	
+			});
+			
+			//Set Table Status to "Stopped"
 			eval("tableStatus"+tableNumber+ " = 'Stopped'");
 
-			//Display Table Start Time
+			//Display Table Stop Time
 			displayTableTime(tableNumber,eval("tableStopTime"+tableNumber));
 		}
 		
