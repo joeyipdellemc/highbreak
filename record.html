@@ -44,8 +44,7 @@
   if ($result->num_rows > 0) {
     // output data of each row 
     while($row = $result->fetch_assoc()){
-      $id = $row["id"];
-      echo "<tr id = 'tr_$id'>";
+      echo "<tr>";
         echo "<th scope='row'>";
           echo $row["id"];
         echo "</th>";
@@ -62,9 +61,10 @@
           echo $row["charge"];
         echo "</td>";
 
+        $id = $row["id"];
         //echo "<td><input type='checkbox' id='del_$id'> </td>";
-        echo "<td><button type='button' class='btn btn-primary btn-sm' id='$id'>Delete</button></td>";
-      echo "</tr>";
+        echo "<td><button type='button' class='btn btn-primary btn-sm' id='del_$id'>Delete</button></td>";
+        echo "</tr>";
     } 
   }
   else {echo "No Data";}
@@ -77,21 +77,7 @@
 </div>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript">
-    $("button").click(function(){
-      var $id = this.id;
-      var isDelete = confirm("Do you really want to delete record ID " + $id + " ?");
-      if (isDelete == true) {
-        // AJAX Request
-        $.ajax({
-          url: 'delete_record.php',
-          type: 'GET',
-          data: {get_id: $id},
-          success: function(response){$("#tr_"+$id).remove();}
-        });
-      }
-    });
-  </script>
+	<script src="/script/delete_script.js"></script> 
 
 
 </body>

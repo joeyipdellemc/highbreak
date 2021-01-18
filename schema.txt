@@ -1,12 +1,12 @@
 Table: table_record
     
-#	Name	    Type	        Collation           Null	Default	
+#	Name	    Type	        Collation           Null	Default     Extra
 1	table_num	int(11)			                    No	    None			
 2	start_time	datetime			                No	    None			
 3	stop_time	datetime			                Yes	    NULL			
 4	status	    varchar(20)	    utf8_general_ci		No	    None			
 5	charge	    decimal(10,2)			            Yes	    0.00		
-
+6   id          bigint(20) (serial)                 No      None        AUTO_INCREMENT (serial)      
 
 Table: table_charge	
 
