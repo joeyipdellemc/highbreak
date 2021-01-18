@@ -16,6 +16,8 @@
 </h5>
   <nav class="my-2 my-md-0 mr-md-3">
     <a class="p-2 text-dark" href="index.html">Timer</a>
+    <a class="p-2 text-dark" href="record.php">Record</a>
+    <a class="p-2 text-dark" href="admin.php">Admin</a>
   </nav>
 
   <a class="btn btn-outline-primary" href="#">Login</a>
