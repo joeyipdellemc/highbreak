@@ -34,9 +34,14 @@
           <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
             <div class="d-flex justify-content-between align-items-center w-100">
               <strong class="text-gray-dark">Change Hourly Rate</strong>
-              <button type='button' class='btn btn-primary btn-sm' id='$id'>Submit
             </div>
             <span class="d-block" id = "hourlyRateSpan">Current Houly Rate is HKD$</span>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="New Hourly Rate" aria-label="ew Hourly Rate" aria-describedby="basic-addon2" id = 'valChangeHourlyRate'>
+            <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id = 'btnChangeHourlyRate'>Submit</button>
+            </div>
+</div>
           </div>
         </div>
 </div>
@@ -57,6 +62,23 @@
                 hourlyRate = data;
                 console.log(hourlyRate);
                 $("#hourlyRateSpan").text("Current Houly Rate is HKD$ is " +hourlyRate );
+            });
+
+            $("#btnChangeHourlyRate").click(function(){
+              var valChangeHourlyRate = $("#valChangeHourlyRate").val();
+              console.log(valChangeHourlyRate.lenght);
+              if (valChangeHourlyRate.lenght !=0 ){
+                var isChange = confirm("Do you really change the hourly rate to HKD$" + valChangeHourlyRate + " ?");
+                if (isChange == true) {
+                  // AJAX Request
+                  $.ajax({
+                    url: 'delete_record.php',
+                    type: 'GET',
+                    data: {get_id: $id},
+                  success: function(response){$("#tr_"+$id).remove();}
+                  });
+                }
+              }
             });
 
         });    
