@@ -61,24 +61,25 @@
             }).done(function( data ) {
                 hourlyRate = data;
                 console.log(hourlyRate);
-                $("#hourlyRateSpan").text("Current Houly Rate is HKD$ is " +hourlyRate );
+                $("#hourlyRateSpan").text("Current Houly Rate is HKD$" +hourlyRate );
             });
 
             $("#btnChangeHourlyRate").click(function(){
               var valChangeHourlyRate = $("#valChangeHourlyRate").val();
               console.log(valChangeHourlyRate.lenght);
-              if (valChangeHourlyRate.lenght !=0 ){
+              if (valChangeHourlyRate){
                 var isChange = confirm("Do you really change the hourly rate to HKD$" + valChangeHourlyRate + " ?");
                 if (isChange == true) {
                   // AJAX Request
                   $.ajax({
-                    url: 'delete_record.php',
+                    url: 'changeHourlyRate.php',
                     type: 'GET',
-                    data: {get_id: $id},
-                  success: function(response){$("#tr_"+$id).remove();}
+                    data: {changeRate: valChangeHourlyRate},
+                  success: function(response){$("#hourlyRateSpan").text("Current Houly Rate is HKD$" +valChangeHourlyRate );}
                   });
                 }
               }
+              else{alert("No Value")}
             });
 
         });    
