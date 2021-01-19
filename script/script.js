@@ -209,9 +209,6 @@ $("document").ready(function(){
 			$("#btnStartTable" + tableNumber).text("Starting");
 			$("#btnStartTable" + tableNumber).prop("disabled", true);
 			$("#btnStopTable" + tableNumber).prop("disabled", false);
-			$("#btnChangeTable" + tableNumber).prop("disabled", false);
-			
-		
 			//$("#timeCurrentTable" + tableNumber).text(tableAction);
 			
 			// Dim the Table
@@ -227,10 +224,21 @@ $("document").ready(function(){
 			eval("tableStartTime" + tableNumber + "= new Date(table_status);");
 			
 			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
+
+			//Enable MoveFrom Radio Button
+			$("#fromTable" + tableNumber).prop("disabled", false)
+
+			//Disable MoveTo Radio Button
+			$("#toTable" + tableNumber).prop("disabled", true)
+
+			//Clear MoveFrom Radio Button
+			$("#fromTable" + tableNumber).prop("checked", false)
+			$("#toTable" + tableNumber).prop("checked", false)
+
 		}
 
-		
-	}	
+		}
+
 
 	// Listening Botton Action
 	$("button").click(function(){
@@ -250,14 +258,13 @@ $("document").ready(function(){
 			
 			//check the button if it is pause, pause will no set new date otherwise, set startTime
 			if ($("#btnStartTable"+ tableNumber).text()!="Resume"){
-				console.log("set start Date");
+				//console.log("set start Date");
 				eval("tableStartTime" + tableNumber + "= new Date();");
 			}
 			// Update Button Status
 			$("#btnStartTable" + tableNumber).text("Starting");
 			$("#btnStartTable" + tableNumber).attr("disabled", true);
 			$("#btnStopTable" + tableNumber).attr("disabled", false);
-			//$("#btnChangeTable" + tableNumber).attr("disabled", false);
 			//$("#timeCurrentTable" + tableNumber).text(tableAction);
 
 			// Dim the Table
@@ -269,9 +276,22 @@ $("document").ready(function(){
 			//Set Table Status to "Started"
 			eval("tableStatus"+tableNumber+ " = 'Started'");
 
+
 			//Display Table Start Time
 
 			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
+
+			//Enable MoveFrom Radio Button
+			$("#fromTable" + tableNumber).prop("disabled", false)
+
+			//Disable MoveTo Radio Button
+			$("#toTable" + tableNumber).prop("disabled", true)
+
+			//Clear MoveFrom Radio Button
+			$("#fromTable" + tableNumber).prop("checked", false)
+			$("#toTable" + tableNumber).prop("checked", false)
+
+			
 
 			$.ajax({
 				url: "startTable.php",
@@ -294,8 +314,6 @@ $("document").ready(function(){
 			//$("#timeCurrentTable" + tableNumber).text(tableAction);
 			//Disabe Stop & Pause Button
 			$("#btnStopTable" + tableNumber).attr("disabled", true);
-			//$("#btnChangeTable" + tableNumber).attr("disabled", true);
-
 			// Set the Stop table Time
 			eval("tableStopTime" + tableNumber + "= new Date();");
 
@@ -320,11 +338,149 @@ $("document").ready(function(){
 
 			//Display Table Stop Time
 			displayTableTime(tableNumber,eval("tableStopTime"+tableNumber));
+
+			//Enable MoveTo Radio Button
+			$("#toTable" + tableNumber).prop("disabled", false)
+
+			//Disable MoveFrom Radio Button
+			$("#fromTable" + tableNumber).prop("disabled", true)
+			
+			//Clear MoveFrom Radio Button
+			$("#fromTable" + tableNumber).prop("checked", false)
+			$("#toTable" + tableNumber).prop("checked", false)
 		}
 	
 		// Change Table
 		if (tableAction == "ChangeTable"){
-			console.log("change Table"+tableNumber);
+			var tableMoveFrom 
+			var tableMoveFromID
+			var tableMoveTo
+			for (i=1;i<=3;i++){
+				tableNumber = i;
+				if($("#fromTable"+tableNumber).prop("checked")){
+					console.log("Move From Table "+tableNumber);
+					tableMoveFrom = tableNumber;
+				}
+				if($("#toTable"+tableNumber).prop("checked")){
+					console.log("Move to Table "+tableNumber);
+					tableMoveTo= tableNumber;
+				}
+			}
+			if (!tableMoveFrom){
+				alert("Please select which table move from")
+			}
+			if (!tableMoveTo){
+				alert("Please select which table move To")
+			}
+
+			if (tableMoveFrom && tableMoveTo){
+				alert("moved from table "+tableMoveFrom+" to " + tableMoveTo);
+				
+				//get tableMoveFromID
+				$.ajax({
+					url: "getTableMoveFromID.php",
+					type: "GET",
+					data: {tableMoveFrom: tableMoveFrom},
+					async: false
+				}).done(function( data ) {
+					tableMoveFromID = data;
+				});
+							
+
+				//Stop Move From Table
+				//Enable Table Start Button
+				$("#btnStartTable" + tableMoveFrom).text("Start");
+				$("#btnStartTable" + tableMoveFrom).attr("disabled", false);
+				//$("#timeCurrentTable" + tableNumber).text(tableAction);
+				//Disabe Stop & Pause Button
+				$("#btnStopTable" + tableMoveFrom).attr("disabled", true);
+				// Set the Stop table Time
+				//eval("tableStopTime" + tableMoveFrom + "= new Date();");
+
+				// Un-Dim the Table
+				$("#imageTable" + tableMoveFrom).fadeTo(500,1);
+				
+				//update Database
+				//console.log("charge=",tablePlayMoney(tableNumber));
+				console.log("tableMoveFromID: "+ tableMoveFromID);
+				$.ajax({
+					url: "moveTable.php",
+					type: "GET",
+					data: {tableMoveTo: tableMoveTo,tableMoveFromID: tableMoveFromID},
+					async: false
+				}).done(function( data ) {
+					table_status = data;
+					//console.log(table_status);
+					//Set Table Status to "Stopped"
+					eval("tableStatus"+tableMoveFrom+ " = 'Stopped'");
+
+					//Enable MoveTo Radio Button
+					$("#toTable" + tableMoveFrom).prop("disabled", false)
+
+					//Disable MoveFrom Radio Button
+					$("#fromTable" + tableMoveFrom).prop("disabled", true)
+					
+					//Clear MoveFrom Radio Button
+					$("#fromTable" + tableMoveFrom).prop("checked", false)
+					$("#toTable" + tableMoveFrom).prop("checked", false)
+
+					//Clean Up Start Time
+					$("#timeStartTable" + tableMoveFrom).text("Start Time")
+
+					//Clean Up Stop Time
+					$("#timeStopTable" + tableMoveFrom).text("Stop Time")
+
+					//Clean Up Play Time
+					$("#timePlayTable" + tableMoveFrom).text("Play Time");
+
+					//Clean Up Charge
+					$("#timeChargeTable" + tableMoveFrom).text("Charge HKD");
+
+
+
+					//Start Move To Table
+					//check the button if it is pause, pause will no set new date otherwise, set startTime
+					if ($("#btnStartTable"+ tableMoveTo).text()!="Resume"){
+						//console.log("set start Date");
+						eval("tableStartTime" + tableMoveTo + "= tableStartTime"+tableMoveFrom);
+					}
+					// Update Button Status
+					$("#btnStartTable" + tableMoveTo).text("Starting");
+					$("#btnStartTable" + tableMoveTo).attr("disabled", true);
+					$("#btnStopTable" + tableMoveTo).attr("disabled", false);
+					//$("#timeCurrentTable" + tableNumber).text(tableAction);
+
+					// Dim the Table
+					$("#imageTable" + tableMoveTo).fadeTo(500,0.5);
+					
+					//Clean Up Stop Time
+					$("#timeStopTable" + tableMoveTo).text("Stop Time")
+
+					//Set Table Status to "Started"
+					eval("tableStatus"+tableMoveTo+ " = 'Started'");
+
+
+					//Display Table Start Time
+
+					displayTableTime(tableMoveTo,eval("tableStartTime"+tableMoveTo));
+
+					//Enable MoveFrom Radio Button
+					$("#fromTable" + tableMoveTo).prop("disabled", false)
+
+					//Disable MoveTo Radio Button
+					$("#toTable" + tableMoveTo).prop("disabled", true)
+
+					//Clear MoveFrom Radio Button
+					$("#fromTable" + tableMoveTo).prop("checked", false)
+					$("#toTable" + tableMoveTo).prop("checked", false)
+		
+				});
+				
+				
+
+				
+			}
+
 		}
 
 

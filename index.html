@@ -42,15 +42,10 @@
     			<li class="list-group-item" id="timeStartTable1" >Start Time </li>
     			<li class="list-group-item" id="timeStopTable1" >Stop Time </li>
     			<li class="list-group-item" id="timePlayTable1" >Play Time </li>
-    			<li class="list-group-item" id="timeChargeTable1" >Charge HKD </li>
+          <li class="list-group-item" id="timeChargeTable1" >Charge HKD </li>
         </ul>
       </div>
-      <!--
-      <div class="col-sm">
-        <button type="button" id="btnChangeTable1" class="btn btn-lg btn-block btn-outline-primary"disabled="true" >Change Table</button> 
-      </div
-      -->
-   	</div>
+      </div>
  <!-----------Box 2 ----------->
     <div class="card mb-4 shadow-sm">
       <div class="card-header">
@@ -94,7 +89,82 @@
       </div>
  </div>
 
+    <div class="card">
+      <div class="card-body">
+        <div class="card-header"><h4>Move Table</h4></div>
+         <!-- start radio row1 -->
+        <div class="row">
+          <div class="col-4"></div>
+          <div class="col-2"><div><H6>From</H6></div></div>  
+            <div class="col-sm">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fromTableRadioOptions" id="fromTable1" value="1" disabled="true">
+                <label class="form-check-label" for="inlineRadio1">Table 1</label>
+              </div>
+            </div>
+
+            <div class="col-sm">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fromTableRadioOptions" id="fromTable2" value="2" disabled="true">
+                <label class="form-check-label" for="inlineRadio2">Table 2</label>
+              </div>
+            </div>
+
+            <div class="col-sm">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="fromTableRadioOptions" id="fromTable3" value="3" disabled="true">
+                <label class="form-check-label" for="inlineRadio3">Table 3</label>
+              </div>
+            </div>
+          </div>      
+        <!-- end radio row1 -->
+
+        <!-- start radio row2 -->
+        <div class="row">
+          <div class="col-4"></div>
+          <div class="col-2"><div><H6>To</H6></div></div>  
+            <div class="col-sm">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="toTableRadioOptions" id="toTable1" value="1">
+                <label class="form-check-label" for="inlineRadio1">Table 1</label>
+              </div>
+            </div>
+
+            <div class="col-sm">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="toTableRadioOptions" id="toTable2" value="2">
+                <label class="form-check-label" for="inlineRadio2">Table 2</label>
+              </div>
+            </div>
+
+            <div class="col-sm">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="toTableRadioOptions" id="toTable3" value="3">
+                <label class="form-check-label" for="inlineRadio3">Table 3</label>
+              </div>
+            </div>
+          </div>      
+        <!-- end radio row2 -->
+
+        <!-- start radio row3 -->
+        <div class="row">
+          <div class="col-10"></div>
+            <div class="col-sm">
+              <button type="button" id="btnChangeTable1" class="btn-primary btn-sm" >Change</button>
+              </div>
+            </div>
+
+          </div>      
+        <!-- end radio row3 -->
+
+      </div>
+    </div>
+
+
+      
+
 </div>
+
 
 
 <!-----------Footer ----------->
