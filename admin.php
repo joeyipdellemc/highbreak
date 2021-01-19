@@ -21,7 +21,7 @@
     <!--<a class="p-2 text-dark" href="#">Admin</a> -->
   </nav>
 
-  <a class="btn btn-outline-primary" href="#">Login</a>
+ 
 </div>
 
 <!-- Main -->

@@ -141,10 +141,42 @@ function displayTableTime(tableNumber, tableTime){
 	}
 
 }
+
+function displayStartTableUI(tableNumber){
+	// Update Button Status
+	$("#btnStartTable" + tableNumber).text("Starting");
+	$("#btnStartTable" + tableNumber).prop("disabled", true);
+	$("#btnStopTable" + tableNumber).prop("disabled", false);
+	$("#btnChangeTable" + tableNumber).prop("disabled", false);
+	
+
+	//$("#timeCurrentTable" + tableNumber).text(tableAction);
+	
+	// Dim the Table
+	$("#imageTable" + tableNumber).fadeTo(500,0.5);
+				
+	//Clean Up Stop Time
+	$("#timeStopTable" + tableNumber).text("Stop Time")
+	
+	//Set Table Status to "Started"
+	eval("tableStatus"+tableNumber+ " = 'Started'");
+	
+	//Display Table Start Time
+	eval("tableStartTime" + tableNumber + "= new Date(table_status);");
+	
+	displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
+
+	//DisplayTableTime(tableNumber,tableStartTime1);
+	//DisplayTableTime(1,Date(table_status));
+	//$("#timeStartTable" + tableNumber).text("Start Time: " + table_status.slice(-8));
+
+}
+
 table_status = "stopped";
 
 //Page Loaded
 $("document").ready(function(){
+
 	// load Database status
 	$.ajax({
 		url: "getHourlyRate.php",
@@ -173,13 +205,13 @@ $("document").ready(function(){
 
 		// Update Table form DB
 		if (table_status != "stopped" ){
-			
-			console.log("table status != stopped");
 			// Update Button Status
 			$("#btnStartTable" + tableNumber).text("Starting");
-			$("#btnStartTable" + tableNumber).attr("disabled", true);
-			$("#btnStopTable" + tableNumber).attr("disabled", false);
-			$("#btnPauseTable" + tableNumber).attr("disabled", false);
+			$("#btnStartTable" + tableNumber).prop("disabled", true);
+			$("#btnStopTable" + tableNumber).prop("disabled", false);
+			$("#btnChangeTable" + tableNumber).prop("disabled", false);
+			
+		
 			//$("#timeCurrentTable" + tableNumber).text(tableAction);
 			
 			// Dim the Table
@@ -193,12 +225,11 @@ $("document").ready(function(){
 			
 			//Display Table Start Time
 			eval("tableStartTime" + tableNumber + "= new Date(table_status);");
-			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
-			//DisplayTableTime(tableNumber,tableStartTime1);
-			//DisplayTableTime(1,Date(table_status));
-			//$("#timeStartTable" + tableNumber).text("Start Time: " + table_status.slice(-8));
 			
+			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
 		}
+
+		
 	}	
 
 	// Listening Botton Action
@@ -219,14 +250,14 @@ $("document").ready(function(){
 			
 			//check the button if it is pause, pause will no set new date otherwise, set startTime
 			if ($("#btnStartTable"+ tableNumber).text()!="Resume"){
-				//console.log("set start Date");
+				console.log("set start Date");
 				eval("tableStartTime" + tableNumber + "= new Date();");
 			}
 			// Update Button Status
 			$("#btnStartTable" + tableNumber).text("Starting");
 			$("#btnStartTable" + tableNumber).attr("disabled", true);
 			$("#btnStopTable" + tableNumber).attr("disabled", false);
-			$("#btnPauseTable" + tableNumber).attr("disabled", false);
+			//$("#btnChangeTable" + tableNumber).attr("disabled", false);
 			//$("#timeCurrentTable" + tableNumber).text(tableAction);
 
 			// Dim the Table
@@ -242,8 +273,6 @@ $("document").ready(function(){
 
 			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
 
-			//update Database
-			//console.log("charge=",tablePlayMoney(tableNumber));
 			$.ajax({
 				url: "startTable.php",
 				type: "GET",
@@ -254,8 +283,6 @@ $("document").ready(function(){
 					//console.log(table_status);
 				
 				});
-
-
 		}
 			
 		// Stop Table
@@ -267,7 +294,7 @@ $("document").ready(function(){
 			//$("#timeCurrentTable" + tableNumber).text(tableAction);
 			//Disabe Stop & Pause Button
 			$("#btnStopTable" + tableNumber).attr("disabled", true);
-			$("#btnPauseTable" + tableNumber).attr("disabled", true);
+			//$("#btnChangeTable" + tableNumber).attr("disabled", true);
 
 			// Set the Stop table Time
 			eval("tableStopTime" + tableNumber + "= new Date();");
@@ -276,7 +303,7 @@ $("document").ready(function(){
 			$("#imageTable" + tableNumber).fadeTo(500,1);
 			
 			//update Database
-			console.log("charge=",tablePlayMoney(tableNumber));
+			//console.log("charge=",tablePlayMoney(tableNumber));
 			$.ajax({
 				url: "stopTable.php",
 				type: "GET",
@@ -284,7 +311,7 @@ $("document").ready(function(){
 				async: false
 			}).done(function( data ) {
 				table_status = data;
-				console.log(table_status);
+				//console.log(table_status);
 	
 			});
 			
@@ -294,7 +321,14 @@ $("document").ready(function(){
 			//Display Table Stop Time
 			displayTableTime(tableNumber,eval("tableStopTime"+tableNumber));
 		}
-		
+	
+		// Change Table
+		if (tableAction == "ChangeTable"){
+			console.log("change Table"+tableNumber);
+		}
+
+
+
 	})
 
 });
