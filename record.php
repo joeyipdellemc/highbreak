@@ -5,6 +5,8 @@
 	<title> Highbreak Snooker</title>
 	<!-- Bootstrap core CSS -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
 
 </head>
 
@@ -22,9 +24,15 @@
 
 </div>
 
-<!---Main Record Table -->s
-<div class="container">
+<!---Main Record Table -->
+<div class="container" >
   <div class="card-deck mb-3 text-center">
+
+  <!-- date  picker -->
+  <div class="col-sm-4">
+  <p>Date: <input type="text" id="datepicker"></p>
+  </div>
+
   <?php
   require_once 'connection.php';
   $sql = "SELECT * FROM table_record ORDER BY start_time DESC";
@@ -78,7 +86,9 @@
 </div>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+  <script>
     $("button").click(function(){
       var $id = this.id;
       var isDelete = confirm("Do you really want to delete record ID " + $id + " ?");
@@ -93,6 +103,15 @@
       }
     });
   </script>
+
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
+ <script>
+ 
+</script>
 
 
 </body>
