@@ -29,9 +29,25 @@
   <div class="card-deck mb-3 text-center">
 
   <!-- date  picker -->
-  <div class="col-sm-4">
-  <p>Date: <input type="text" id="datepicker"></p>
+  <!--
+  <div class="float-left">
+  From: <input type="text" id="datepickerFrom"> 
   </div>
+  <div class="float-right">
+  To: <input type="text" id="datepickerTo">
+  </div>
+  -->
+<script>
+    //Display Current Time
+    clock();
+    function clock(){ 
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+      echo Date();
+    }
+</script>
+
+
 
   <?php
   require_once 'connection.php';
@@ -106,7 +122,8 @@
 
 <script>
   $( function() {
-    $( "#datepicker" ).datepicker();
+    $( "#datepickerFrom" ).datepicker();
+    $( "#datepickerTo" ).datepicker();
   } );
   </script>
  <script>

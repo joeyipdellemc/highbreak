@@ -24,7 +24,17 @@ var hourlyRate = 120 //Default
 // Get Current date and Time
 var currentDate = new Date();
 
-
+function roundToHalf(value) {
+	var converted = parseFloat(value); // Make sure we have a number
+	var decimal = (converted - parseInt(converted, 10));
+	decimal = Math.round(decimal * 10);
+	if (decimal == 5) { return (parseInt(converted, 10)+0.5); }
+	if ( (decimal < 3) || (decimal > 7) ) {
+	   return (Math.round(converted)+".0");
+	} else {
+	   return (parseInt(converted, 10)+0.5);
+	}
+ }
 
 //Play Time
 function tablePlayTime(tableNum){
@@ -53,9 +63,10 @@ function tablePlayMoney(tableNum){
 	  	var hours = Math.floor((playTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 	  	var minutes = Math.floor((playTime % (1000 * 60 * 60)) / (1000 * 60));
 	 	var seconds = Math.floor((playTime % (1000 * 60)) / 1000);
-	 	var dollar = (hours * hourlyRate ) + (minutes * hourlyRate/60) +(seconds * hourlyRate/3600);
+	 	var dollar = (hours * hourlyRate ) + (minutes * hourlyRate/60) +(seconds * hourlyRate/3600)+(hourlyRate/60);
 	 	//console.log ( "Dollar is " + dollar);
-	 	return (dollar.toFixed(1));
+		 //return (dollar.toFixed(1));
+		 return (roundToHalf(dollar));
 	 }
 	 return (0);
 }
@@ -99,7 +110,7 @@ var x = setInterval(function() {
 			//console.log("Table "+i+" Start Time is " + eval("tableStartTime" + i))
 			//console.log("Table "+i+" Charge is " + tablePlayMoney(i));
 			$("#timePlayTable" + i).text("Play Time: " + tablePlayTime(i));
-			$("#timeChargeTable" + i).text("Charge HKD $" + tablePlayMoney (i));
+			$("#timeChargeTable" + i).text("HKD $" + tablePlayMoney (i)+"0");
 		}
 	}
 
@@ -235,6 +246,9 @@ $("document").ready(function(){
 			$("#fromTable" + tableNumber).prop("checked", false)
 			$("#toTable" + tableNumber).prop("checked", false)
 
+			//Card Header Color
+			$("#cardHeaderTable" + tableNumber).addClass("bg-danger")
+
 		}
 
 		}
@@ -261,37 +275,6 @@ $("document").ready(function(){
 				//console.log("set start Date");
 				eval("tableStartTime" + tableNumber + "= new Date();");
 			}
-			// Update Button Status
-			$("#btnStartTable" + tableNumber).text("Starting");
-			$("#btnStartTable" + tableNumber).attr("disabled", true);
-			$("#btnStopTable" + tableNumber).attr("disabled", false);
-			//$("#timeCurrentTable" + tableNumber).text(tableAction);
-
-			// Dim the Table
-			$("#imageTable" + tableNumber).fadeTo(500,0.5);
-			
-			//Clean Up Stop Time
-			$("#timeStopTable" + tableNumber).text("Stop Time")
-
-			//Set Table Status to "Started"
-			eval("tableStatus"+tableNumber+ " = 'Started'");
-
-
-			//Display Table Start Time
-
-			displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
-
-			//Enable MoveFrom Radio Button
-			$("#fromTable" + tableNumber).prop("disabled", false)
-
-			//Disable MoveTo Radio Button
-			$("#toTable" + tableNumber).prop("disabled", true)
-
-			//Clear MoveFrom Radio Button
-			$("#fromTable" + tableNumber).prop("checked", false)
-			$("#toTable" + tableNumber).prop("checked", false)
-
-			
 
 			$.ajax({
 				url: "startTable.php",
@@ -301,27 +284,45 @@ $("document").ready(function(){
 				}).done(function( data ) {
 					table_status = data;
 					//console.log(table_status);
-				
+					// Update Button Status
+					$("#btnStartTable" + tableNumber).text("Starting");
+					$("#btnStartTable" + tableNumber).attr("disabled", true);
+					$("#btnStopTable" + tableNumber).attr("disabled", false);
+					//$("#timeCurrentTable" + tableNumber).text(tableAction);
+
+					// Dim the Table
+					$("#imageTable" + tableNumber).fadeTo(500,0.5);
+					
+					//Clean Up Stop Time
+					$("#timeStopTable" + tableNumber).text("Stop Time")
+
+					//Set Table Status to "Started"
+					eval("tableStatus"+tableNumber+ " = 'Started'");
+
+
+					//Display Table Start Time
+
+					displayTableTime(tableNumber,eval("tableStartTime"+tableNumber));
+
+					//Enable MoveFrom Radio Button
+					$("#fromTable" + tableNumber).prop("disabled", false)
+
+					//Disable MoveTo Radio Button
+					$("#toTable" + tableNumber).prop("disabled", true)
+
+					//Clear MoveFrom Radio Button
+					$("#fromTable" + tableNumber).prop("checked", false)
+					$("#toTable" + tableNumber).prop("checked", false)
+
+					//Card Header Color
+					$("#cardHeaderTable" + tableNumber).addClass("bg-danger")
+
 				});
 		}
 			
 		// Stop Table
 		if (tableAction == "StopTable"){
-
-			// Enable Table Start Button
-			$("#btnStartTable" + tableNumber).text("Start");
-			$("#btnStartTable" + tableNumber).attr("disabled", false);
-			//$("#timeCurrentTable" + tableNumber).text(tableAction);
-			//Disabe Stop & Pause Button
-			$("#btnStopTable" + tableNumber).attr("disabled", true);
-			// Set the Stop table Time
-			eval("tableStopTime" + tableNumber + "= new Date();");
-
-			// Un-Dim the Table
-			$("#imageTable" + tableNumber).fadeTo(500,1);
 			
-			//update Database
-			//console.log("charge=",tablePlayMoney(tableNumber));
 			$.ajax({
 				url: "stopTable.php",
 				type: "GET",
@@ -330,24 +331,40 @@ $("document").ready(function(){
 			}).done(function( data ) {
 				table_status = data;
 				//console.log(table_status);
+				// Enable Table Start Button
+				$("#btnStartTable" + tableNumber).text("Start");
+				$("#btnStartTable" + tableNumber).attr("disabled", false);
+				//$("#timeCurrentTable" + tableNumber).text(tableAction);
+				//Disabe Stop & Pause Button
+				$("#btnStopTable" + tableNumber).attr("disabled", true);
+				// Set the Stop table Time
+				eval("tableStopTime" + tableNumber + "= new Date();");
+
+				// Un-Dim the Table
+				$("#imageTable" + tableNumber).fadeTo(500,1);
+				
+				//Set Table Status to "Stopped"
+				eval("tableStatus"+tableNumber+ " = 'Stopped'");
+
+				//Display Table Stop Time
+				displayTableTime(tableNumber,eval("tableStopTime"+tableNumber));
+
+				//Enable MoveTo Radio Button
+				$("#toTable" + tableNumber).prop("disabled", false)
+
+				//Disable MoveFrom Radio Button
+				$("#fromTable" + tableNumber).prop("disabled", true)
+				
+				//Clear MoveFrom Radio Button
+				$("#fromTable" + tableNumber).prop("checked", false)
+				$("#toTable" + tableNumber).prop("checked", false)
+
+				//Card Header Color
+				$("#cardHeaderTable" + tableNumber).removeClass("bg-danger")
 	
 			});
 			
-			//Set Table Status to "Stopped"
-			eval("tableStatus"+tableNumber+ " = 'Stopped'");
 
-			//Display Table Stop Time
-			displayTableTime(tableNumber,eval("tableStopTime"+tableNumber));
-
-			//Enable MoveTo Radio Button
-			$("#toTable" + tableNumber).prop("disabled", false)
-
-			//Disable MoveFrom Radio Button
-			$("#fromTable" + tableNumber).prop("disabled", true)
-			
-			//Clear MoveFrom Radio Button
-			$("#fromTable" + tableNumber).prop("checked", false)
-			$("#toTable" + tableNumber).prop("checked", false)
 		}
 	
 		// Change Table
