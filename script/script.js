@@ -62,9 +62,10 @@ function tablePlayMoney(tableNum){
 	  	var days = Math.floor(playTime / (1000 * 60 * 60 * 24));
 	  	var hours = Math.floor((playTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 	  	var minutes = Math.floor((playTime % (1000 * 60 * 60)) / (1000 * 60));
-	 	var seconds = Math.floor((playTime % (1000 * 60)) / 1000);
-	 	var dollar = (hours * hourlyRate ) + (minutes * hourlyRate/60) +(seconds * hourlyRate/3600)+(hourlyRate/60);
-	 	//console.log ( "Dollar is " + dollar);
+		var seconds = Math.floor((playTime % (1000 * 60)) / 1000);
+		//var dollar = (hours * hourlyRate ) + (minutes * hourlyRate/60) +(seconds * hourlyRate/3600)+(hourlyRate/60);
+		var dollar = (days * hourlyRate*24) + (hours * hourlyRate ) + (minutes * hourlyRate/60) +(hourlyRate/60);
+		 //console.log ( "Dollar is " + dollar);
 		 //return (dollar.toFixed(1));
 		 return (roundToHalf(dollar));
 	 }
@@ -453,6 +454,9 @@ $("document").ready(function(){
 					//Clean Up Charge
 					$("#timeChargeTable" + tableMoveFrom).text("Charge HKD");
 
+					//Card Header Color
+					$("#cardHeaderTable" + tableMoveFrom).removeClass("bg-danger")
+
 
 
 					//Start Move To Table
@@ -490,6 +494,9 @@ $("document").ready(function(){
 					//Clear MoveFrom Radio Button
 					$("#fromTable" + tableMoveTo).prop("checked", false)
 					$("#toTable" + tableMoveTo).prop("checked", false)
+
+					//Card Header Color
+					$("#cardHeaderTable" + tableMoveTo).addClass("bg-danger")
 		
 				});
 				

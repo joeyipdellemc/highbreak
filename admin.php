@@ -3,7 +3,7 @@
 <head>
 	<title> Highbreak Snooker</title>
 	<!-- Bootstrap core CSS -->
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link href="./lib/bootstrap.min.css" rel="stylesheet">
 
 </head>
 
@@ -49,7 +49,7 @@
 </main>
 </div>
   
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="./lib/jquery.min.js"></script>
     <script type="text/javascript">
         //Hourly Rate
         var hourlyRate = 120 //Default  
