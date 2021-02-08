@@ -19,9 +19,10 @@
   <h5 class="my-0 mr-md-auto font-weight-normal"><img src="./media/highbreaklogo.png" class="img-fluid"alt="Highbreak Snooker"></h1>
 </h5>
   <nav class="my-2 my-md-0 mr-md-3">
-    <a class="p-2 text-dark" href="index.html">Timer</a>
+    <a class="p-2 text-dark" href="index.php">Timer</a>
     <a class="p-2 text-dark" href="record.php">Record</a>
     <a class="p-2 text-dark" href="admin.php">Admin</a>
+
   </nav>
 
 </div>
@@ -77,6 +78,7 @@
 <div class="container" >
   <div class="card-deck mb-3 text-center"> 
 
+<!--
   <form>
     <div class="row">
       <div class="col">
@@ -87,6 +89,14 @@
       </div>
     </div>
   </form>
+-->
+  <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Date" aria-describedby="inputGroup-sizing-default" id="datepickerFrom">
+  <span class="input-group-text"  style="font-weight: bold;color:blue" id = "dailyEarn">Date</span>
+</div>
 
     <!--
     <div class="float-right">
@@ -146,6 +156,7 @@
         </table>";
   $conn->close();
   ?>
+  
   </div>
 </div>
 
@@ -153,6 +164,7 @@
 
   <script>
     $("button").click(function(){
+      console.log(this.id);
       var $id = this.id;
       var isDelete = confirm("Do you really want to delete record ID " + $id + " ?");
       if (isDelete == true) {
@@ -200,6 +212,22 @@
           }).done(function(data) { 
             console.log(data);
             $("#dailyTable").append(data);
+            
+            $("button").click(function(){
+            console.log(this.id);
+            var $id = this.id;
+            var isDelete = confirm("Do you really want to delete record ID " + $id + " ?");
+            if (isDelete == true) {
+              // AJAX Request
+              $.ajax({
+                url: 'delete_record.php',
+                type: 'GET',
+                data: {get_id: $id},
+                success: function(response){$("#tr_"+$id).remove();}
+        });
+      }
+    });
+            
           })
         }
 

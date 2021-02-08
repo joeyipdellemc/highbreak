@@ -12,3 +12,18 @@ Table: table_charge
 
 #	Name	        Type	        Null	Default	
 1	hourly_charge	decimal(10,2)	No	    150.00			
+
+
+Table: table_user
+#	Name		Type		Collation	Attributes	Null	Default	Comments	Extra		
+1	id		int(11)						No	None			AUTO_INCREMENT	
+2	username	varchar(60)	utf8_general_ci			No	None					
+3	password	varchar(60)	utf8_general_ci			No	None
+
+Table: table_user_token
+#	Name		Type		Collation	Attributes			Null	Default	Comments	Extra	
+1	id		int(11)								No	None			AUTO_INCREMENT	
+2	username	varchar(80)	utf8_general_ci					No	None				
+3	token		varchar(80)	utf8_general_ci					No	None				
+4	timemodified	timestamp			on update CURRENT_TIMESTAMP	No	CURRENT_TIMESTAMP	ON UPDATE CURRENT_TIMESTAMP					
+
