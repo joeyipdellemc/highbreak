@@ -23,6 +23,7 @@
     <a class="p-2 text-dark" href="index.php">Timer</a>
     <a class="p-2 text-dark" href="record.php">Record</a>
     <a class="p-2 text-dark" href="admin.php">Admin</a>
+    <a class="p-2 text-dark" href="report.php">Report</a>
 
   </nav>
 
