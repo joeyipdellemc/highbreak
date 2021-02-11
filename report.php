@@ -33,9 +33,7 @@
 
 
 <div class="container" >
-  <div class="card-deck mb-3 text-center"> 
-
-
+  <div class="card-deck mb-3 text-center border border-primary"> 
 
   <?php
     require_once 'connection.php';
@@ -64,98 +62,62 @@
           echo "</th>";
           echo "<th scope='row'>";
             echo $row["sum(charge)"];
-          echo "</th>";
-          echo "<td>";
-          
       } 
     }
    
-  
     echo "</tbody>
           </table>";
+
+    
+
     $conn->close();
   ?>
   
+
   </div>
 </div>
 
+
+  <div class="container border border-primary" id="dailyTotal">
+
+  </div>
+
+
 </div>
-
-  <script>
-    $("button").click(function(){
-      console.log(this.id);
-      var $id = this.id;
-      var isDelete = confirm("Do you really want to delete record ID " + $id + " ?");
-      if (isDelete == true) {
-        // AJAX Request
+<!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
+<script type="text/javascript" src="./lib/loader.js"></script>
+<script>
+$(document).ready( function() {
         $.ajax({
-          url: 'delete_record.php',
-          type: 'GET',
-          data: {get_id: $id},
-          success: function(response){$("#tr_"+$id).remove();}
+            type: 'POST',
+            url: 'dailySum.php',
+            dataType: 'json',
+            cache: false,
+            success: function(result) {
+                google.charts.load("current", {packages:["bar"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                  var data = new google.visualization.DataTable();
+                  data.addColumn('string', 'date');
+                  data.addColumn('number', 'total');
+                  result.forEach(function (row){
+                    data.addRow([
+                      row.date,
+                      parseFloat(row.total)
+                    ])
+                  });
+                  var options = {
+                    chart: {
+                      title: 'Daily Total',
+                      }
+                  };
+                  var chart = new google.charts.Bar(document.getElementById('dailyTotal'));
+                  chart.draw(data, options);
+                };
+            },
         });
-      }
-    });
-  </script>
-
-
-  <script>
-
-  function updateTime(k) {
-  	if (k < 10) {
-  		return "0" + k;
-		}
-		else {
-			return k;
-		}
-  }
-  
-  $(function() {
-    //$("#datapickerFrom").datepicker("setDate", "10/12/2012");
-    //console.log($("#datepickerFrom" ).datepicker("getDate"));
-    //$( "#datepickerTo" ).datepicker();
-    $("#datepickerFrom" ).val(today);
-    $("#datepickerFrom" ).datepicker(
-      { 
-        dateFormat: "yy-mm-dd",
-        onClose: function(){
-          var selectedDate = $("#datepickerFrom" ).datepicker("getDate");
-          datePicked = (selectedDate.getFullYear() +"-"+ updateTime(selectedDate.getMonth()+1) +"-"+ updateTime(selectedDate.getDate()));
-          $("#tableRecord").remove();
-
-          $.ajax({
-            url: "dailyRecordTable.php",
-            type: "GET",
-            data: {dateToQuery: datePicked},
-            async: true
-          }).done(function(data) { 
-            console.log(data);
-            $("#dailyTable").append(data);
-            
-            $("button").click(function(){
-            console.log(this.id);
-            var $id = this.id;
-            var isDelete = confirm("Do you really want to delete record ID " + $id + " ?");
-            if (isDelete == true) {
-              // AJAX Request
-              $.ajax({
-                url: 'delete_record.php',
-                type: 'GET',
-                data: {get_id: $id},
-                success: function(response){$("#tr_"+$id).remove();}
-        });
-      }
-    });
-            
-          })
-        }
-
-      
-      });
-    
-  } );
-  </script>
-
+});
+</script>
 
 </body>
 </html>
