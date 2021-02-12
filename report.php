@@ -62,6 +62,7 @@
           echo "</th>";
           echo "<th scope='row'>";
             echo $row["sum(charge)"];
+        echo "</tr>";
       } 
     }
    
