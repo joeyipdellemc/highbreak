@@ -6,7 +6,7 @@
 	<!-- Bootstrap core CSS -->
 	<link href="./lib/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./lib/jquery-ui/jquery-ui.css">
-  <script src="./lib/jquery-ui/external/jquery/jquery.js"></script>
+  <script src="./lib/jquery-ui/external/jquery/jquery.js"></script> 
   <script src="./lib/jquery-ui/jquery-ui.js"></script>
   <!--<script src="./lib/jquery.min.js"></script> -->
 
@@ -33,7 +33,7 @@
 
 
 <div class="container" >
-  <div class="card-deck mb-3 text-center border border-primary"> 
+  <div class="card"> 
 
   <?php
     require_once 'connection.php';
@@ -76,49 +76,64 @@
   
 
   </div>
-</div>
 
-
-  <div class="container border border-primary" id="dailyTotal">
-
+  <div class="card">
+    <div class="card-body" id="dailyTotal"> </div>
   </div>
 
-
 </div>
-<!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
-<script type="text/javascript" src="./lib/loader.js"></script>
-<script>
-$(document).ready( function() {
-        $.ajax({
-            type: 'POST',
+
+
+
+<script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js"></script>
+<script type = "text/javascript">
+google.charts.load('current', {packages: ['corechart']});     
+
+    function drawChart() {
+      $.ajax({
+            
             url: 'dailySum.php',
             dataType: 'json',
             cache: false,
+            async : false,
             success: function(result) {
-                google.charts.load("current", {packages:["bar"]});
-                google.charts.setOnLoadCallback(drawChart);
-                function drawChart() {
-                  var data = new google.visualization.DataTable();
+              
+              console.log(result);
+              var data = new google.visualization.DataTable(result);
+
+              
                   data.addColumn('string', 'date');
                   data.addColumn('number', 'total');
+                  
                   result.forEach(function (row){
                     data.addRow([
                       row.date,
                       parseFloat(row.total)
                     ])
-                  });
-                  var options = {
-                    chart: {
-                      title: 'Daily Total',
-                      }
-                  };
-                  var chart = new google.charts.Bar(document.getElementById('dailyTotal'));
-                  chart.draw(data, options);
+                    console.log(row.date);
+                    console.log(row.total);
+                  })
+                    
+              var options = {
+                  title: 'Daily Total',
+                  legend: 'none',
+                  bar: {groupWidth: '20%'},
+                  vAxis: { gridlines: { count: 4 } }
                 };
-            },
-        });
-});
-</script>
+                  
+                  
+                  var chart = new google.visualization.ColumnChart(document.getElementById('dailyTotal'));
+                  chart.draw(data, options);
+              }  
+                
+        
+      });
+      
+
+  }
+  google.charts.setOnLoadCallback(drawChart);
+  </script>
+
 
 </body>
 </html>
