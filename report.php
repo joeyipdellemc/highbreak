@@ -117,6 +117,9 @@ google.charts.load('current', {packages: ['corechart']});
               var options = {
                   title: 'Daily Total',
                   legend: 'none',
+                  direction:-1,
+                  slantedText:true,
+                  slantedTextAngle:45,
                   bar: {groupWidth: '20%'},
                   vAxis: { gridlines: { count: 4 } }
                 };
@@ -131,6 +134,7 @@ google.charts.load('current', {packages: ['corechart']});
       
 
   }
+
   google.charts.setOnLoadCallback(drawChart);
   </script>
 
