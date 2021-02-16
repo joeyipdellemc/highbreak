@@ -178,7 +178,8 @@ google.charts.load('current', {packages: ['corechart']});
                   slantedText:true,
                   slantedTextAngle:45,
                   bar: {groupWidth: '90%'},
-                  vAxis: { gridlines: { count: 4 }}
+                  vAxis: { gridlines: { count: 4 },viewWindow: {max:6000, min:0 }},
+                
                 };
                   
                   
