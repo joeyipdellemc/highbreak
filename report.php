@@ -54,7 +54,7 @@
           while($row = $result->fetch_assoc()){
             $year = $row["year(start_time)"];
             $month = sprintf("%02d", $row["month(start_time)"]);
-            echo "<tr id='montly_$year$month'>";
+            echo "<tr id='monthly_$year$month'>";
               echo "<th scope='row'>";
                 echo $year;
               echo "</th>";
@@ -72,11 +72,13 @@
       ?>
     </div>
   </div>  
+</div>
 
+<div class="card-deck mb-3 text-center">
   <div class="container">
     <div class="card-body" id="dailyTotal"> </div>
   </div>
-
+</div>
   <div class="container"> 
     <div class="class-body">      
       <?php
@@ -134,17 +136,26 @@
 <script type = "text/javascript" src = "./charts/loader.js"></script>
 <script type = "text/javascript">
 google.charts.load('current', {packages: ['corechart']});     
-
+  
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth()+1;
+  console.log('#monthly_'+year+month);
+  
+  $("#monthly_"+year+month).addClass('bg-success').siblings().removeClass('bg-success');
     function drawChart() {
+      console.log("yeartoquery",year, month);
       $.ajax({
             
             url: 'dailySum.php',
+            data: {yearToQuery: year, monthToQuery : month},
+         
             dataType: 'json',
             cache: false,
             async : false,
             success: function(result) {
-              
-              console.log(result);
+             
+              //console.log(result);
               var data = new google.visualization.DataTable(result);
 
               
@@ -156,8 +167,8 @@ google.charts.load('current', {packages: ['corechart']});
                       row.date,
                       parseFloat(row.total)
                     ])
-                    console.log(row.date);
-                    console.log(row.total);
+                    //console.log(row.date);
+                    //console.log(row.total);
                   })
                     
               var options = {
@@ -166,8 +177,8 @@ google.charts.load('current', {packages: ['corechart']});
                   direction:-1,
                   slantedText:true,
                   slantedTextAngle:45,
-                  bar: {groupWidth: '20%'},
-                  vAxis: { gridlines: { count: 4 } }
+                  bar: {groupWidth: '90%'},
+                  vAxis: { gridlines: { count: 4 }}
                 };
                   
                   
@@ -199,6 +210,25 @@ google.charts.load('current', {packages: ['corechart']});
       }
     });
   </script>
+
+<script>
+$(document).on("click", "tr", function(e) {
+    if (this.id.includes("monthly")){
+      $(this).addClass('table-active').siblings().removeClass('table-active');
+      year = this.id.substring(8,12);
+      month = this.id.substring(12,14);
+      console.log("clicked", month);
+      //$("#dailyTotal").remove();
+      drawChart();
+      
+    }
+
+    
+});
+
+
+
+</script>
 
 </body>
 </html>
