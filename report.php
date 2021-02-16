@@ -30,61 +30,107 @@
 
 <!---Main Record Table -->
 
+<div class="card-deck mb-3 text-center">
 
+  <div class="container">
+    <div class="card-body"> 
 
-<div class="container" >
-  <div class="card"> 
+      <?php
+        require 'connection.php';
+        $sql = "select year(start_time),month(start_time),sum(charge) from table_record group by year(start_time),month(start_time) order by year(start_time),month(start_time)
+        ";
+        $result = $conn->query($sql); 
+        echo "<table class='table table-hover' id='tableRecord'>
+          <thead class='thead-dark'>
+            <tr>
+              <th scope='col'>Year</th>
+              <th scope='col'>Month</th>
+              <th scope='col'>Total</th>
+            </tr>
+          </thead>
+          <tbody>";
+        if ($result->num_rows > 0) {
+          // output data of each row 
+          while($row = $result->fetch_assoc()){
+            $year = $row["year(start_time)"];
+            $month = sprintf("%02d", $row["month(start_time)"]);
+            echo "<tr id='montly_$year$month'>";
+              echo "<th scope='row'>";
+                echo $year;
+              echo "</th>";
+              echo "<th scope='row'>";
+                echo $month;
+              echo "</th>";
+              echo "<th scope='row'>";
+                echo $row["sum(charge)"];
+            echo "</tr>";
+          } 
+        }      
+        echo "</tbody>
+              </table>";
+        $conn->close();
+      ?>
+    </div>
+  </div>  
 
-  <?php
-    require_once 'connection.php';
-    $sql = "select year(start_time),month(start_time),sum(charge) from table_record group by year(start_time),month(start_time) order by year(start_time),month(start_time)
-    ";
-    $result = $conn->query($sql);
-  
-    echo "<table class='table table-hover' id='tableRecord'>
-      <thead class='thead-dark'>
-        <tr>
-          <th scope='col'>Year</th>
-          <th scope='col'>Month</th>
-          <th scope='col'>Total</th>
-        </tr>
-      </thead>
-      <tbody>";
-    if ($result->num_rows > 0) {
-      // output data of each row 
-      while($row = $result->fetch_assoc()){
-        echo "<tr>";
-          echo "<th scope='row'>";
-            echo $row["year(start_time)"];
-          echo "</th>";
-          echo "<th scope='row'>";
-            echo $row["month(start_time)"];
-          echo "</th>";
-          echo "<th scope='row'>";
-            echo $row["sum(charge)"];
-        echo "</tr>";
-      } 
-    }
-   
-    echo "</tbody>
-          </table>";
-
-    
-
-    $conn->close();
-  ?>
-  
-
-  </div>
-
-  <div class="card">
+  <div class="container">
     <div class="card-body" id="dailyTotal"> </div>
   </div>
 
-</div>
+  <div class="container"> 
+    <div class="class-body">      
+      <?php
+        require 'connection.php';
+        $sql = "SELECT * FROM table_record ORDER BY start_time DESC";
+        $result = $conn->query($sql);
 
+        echo "<table class='table table-hover' id='tableRecord'>
+          <thead class='thead-dark'>
+            <tr>
+              <th scope='col'>ID</th>
+              <th scope='col'>Table Number</th>
+              <th scope='col'>Start Time</th>
+              <th scope='col'>Stop Time</th>
+              <th scope='col'>Chrage</th>
+              <th scope='col'>Delete</th>
+            </tr>
+          </thead>
+          <tbody>";
+        if ($result->num_rows > 0) {
+          // output data of each row 
+          while($row = $result->fetch_assoc()){
+            $id = $row["id"];
+            echo "<tr id = 'tr_$id'>";
+              echo "<th scope='row'>";
+                echo $row["id"];
+              echo "</th>";
+              echo "<th scope='row'>";
+                echo $row["table_num"];
+              echo "</th>";
+              echo "<td>";
+                echo $row["start_time"];
+              echo "</td>";
+              echo "<td>";
+                echo $row["stop_time"];
+              echo "</td>";
+              echo "<td>";
+                echo $row["charge"];
+              echo "</td>";
 
+              //echo "<td><input type='checkbox' id='del_$id'> </td>";
+              echo "<td><button type='button' class='btn btn-primary btn-sm' id='$id'>Delete</button></td>";
+            echo "</tr>";
+          } 
+        }
+        else {echo "No Data";}
 
+        echo "</tbody>
+              </table>";
+        $conn->close();
+        ?> 
+    </div>
+  </div>
+</div>  
 <script type = "text/javascript" src = "./charts/loader.js"></script>
 <script type = "text/javascript">
 google.charts.load('current', {packages: ['corechart']});     
@@ -132,65 +178,10 @@ google.charts.load('current', {packages: ['corechart']});
         
       });
       
-
   }
 
   google.charts.setOnLoadCallback(drawChart);
   </script>
-<?php
-  require_once 'connection.php';
-  $sql = "SELECT * FROM table_record ORDER BY start_time DESC";
-  $result = $conn->query($sql);
-
-  echo "<table class='table table-hover' id='tableRecord'>
-    <thead class='thead-dark'>
-      <tr>
-        <th scope='col'>ID</th>
-        <th scope='col'>Table Number</th>
-        <th scope='col'>Start Time</th>
-        <th scope='col'>Stop Time</th>
-        <th scope='col'>Chrage</th>
-        <th scope='col'>Delete</th>
-      </tr>
-    </thead>
-    <tbody>";
-  if ($result->num_rows > 0) {
-    // output data of each row 
-    while($row = $result->fetch_assoc()){
-      $id = $row["id"];
-      echo "<tr id = 'tr_$id'>";
-        echo "<th scope='row'>";
-          echo $row["id"];
-        echo "</th>";
-        echo "<th scope='row'>";
-          echo $row["table_num"];
-        echo "</th>";
-        echo "<td>";
-          echo $row["start_time"];
-        echo "</td>";
-        echo "<td>";
-          echo $row["stop_time"];
-        echo "</td>";
-        echo "<td>";
-          echo $row["charge"];
-        echo "</td>";
-
-        //echo "<td><input type='checkbox' id='del_$id'> </td>";
-        echo "<td><button type='button' class='btn btn-primary btn-sm' id='$id'>Delete</button></td>";
-      echo "</tr>";
-    } 
-  }
-  else {echo "No Data";}
-
-  echo "</tbody>
-        </table>";
-  $conn->close();
-  ?>
-  
-  </div>
-</div>
-
-</div>
 
   <script>
     $("button").click(function(){
